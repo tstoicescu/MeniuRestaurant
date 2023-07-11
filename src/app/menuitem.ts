@@ -1,2 +1,1 @@
-export interface MenuItem {
-}
+export interface MenuItem {}

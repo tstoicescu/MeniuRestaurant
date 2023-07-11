@@ -4,6 +4,8 @@ import { HousingLocationComponent } from '../housing-location/ItemMeniuComponent
 import { itemMeniu } from '../housinglocation';
 import { MenuItem } from '../menuitem';
 import { HousingService } from '../housing.service';
+import { ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -32,9 +34,10 @@ import { HousingService } from '../housing.service';
   `,
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent {
-  housingLocationList: itemMeniu[] = [];
+export class HomeDepthComponent {
+  route: ActivatedRoute = inject(ActivatedRoute);
   housingService: HousingService = inject(HousingService);
+  housingLocationList: itemMeniu[] = [];
   filteredLocationList: itemMeniu[] = [];
 
   filterResults(text: string) {
@@ -47,20 +50,23 @@ export class HomeComponent {
         housingLocation?.DENUMIRE.toLowerCase().includes(text.toLowerCase())
     );
   }
-  /*
-  constructor() {
-    this.housingLocationList = this.housingService.getAllHousingLocations();
-    this.filteredLocationList = this.housingLocationList;
-  }*/
-
-  constructor() {
+  constructor(private router: Router) {
+    const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService
-      .getAllHousingLocations()
-      .then((housingLocationList: itemMeniu[]) => {
+      .getHousingLocationById(housingLocationId)
+      .then((housingLocationList) => {
         this.housingLocationList = housingLocationList;
+        console.log(housingLocationList);
         this.filteredLocationList = housingLocationList;
       });
     /*const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById();*/
+  }
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        window.location.reload();
+      }
+    });
   }
 }
