@@ -14,7 +14,12 @@ const routeConfig: Routes = [
     title: 'Home details',
   },
   {
-    path: 'details/:id/TEST',
+    path: 'details/:id/',
+    component: HomeDepthComponent,
+    title: 'Home details',
+  },
+  {
+    path: 'details/:id/DETALII',
     component: DetailsComponent,
     title: 'App details',
   },

@@ -66,31 +66,34 @@ export class DetailsComponent {
 
   SelectDacaPret() {
     if (this.housingLocation.PUA_CANT_PORTIE == 0) return '';
-    else return this.housingLocation.PUA_CANT_PORTIE + ' RON';
+    else {
+      console.log(this.housingLocation.PICTURE);
+      return this.housingLocation.PUA_CANT_PORTIE + ' RON';
+    }
   }
   SelectDacaBucata() {
     if (this.housingLocation.CANT_PORTIE == 0) return this.housingLocation.UM;
     else
       return this.housingLocation.CANT_PORTIE + ' ' + this.housingLocation.UM;
   }
+
   constructor(private sanitizer: DomSanitizer) {
     const housingLocationId = Number(this.route.snapshot.params['id']);
+
     console.log(housingLocationId);
     this.housingService
       .getItemDetaliiByID(housingLocationId)
       .then((housingLocation) => {
         this.housingLocation = housingLocation;
         console.log(housingLocation);
+
+        let unsafeURL = `data: image/png;base64, ${this.housingLocation.PICTURE}`;
+
+        console.log(unsafeURL);
+        console.log(typeof this.housingLocation.PICTURE);
+        this.safeURL = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeURL);
       });
   }
-  ngOnInit() {
-    let unsafeURL = `data: image/png;base64, ${this.housingLocation.PICTURE}`;
-
-    console.log(unsafeURL);
-    console.log(typeof this.housingLocation.PICTURE);
-    this.safeURL = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeURL);
-  }
-
   /*constructor() {
     //  const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     console.log(this.housingLocation);

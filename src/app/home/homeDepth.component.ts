@@ -57,7 +57,10 @@ export class HomeDepthComponent {
       .then((housingLocationList) => {
         this.housingLocationList = housingLocationList;
         console.log(housingLocationList);
+
         this.filteredLocationList = housingLocationList;
+        if (this.housingLocationList.length == 0)
+          document.location.href = document.location.href + '/DETALII';
       });
     /*const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById();*/

@@ -248,6 +248,7 @@ export class HousingService {
         'http://proiecte.datalight.ro/DataLight/restaurant/MeniuPictures?IDMeniu=' +
         results[0].IDMENIU +
         '&$FORMAT=json&$SELECT=PICTURE';
+      console.log(picurl);
       response = await fetch(picurl, options);
       data = await response.json();
       results[0].PICTURE = data.d.results[0].PICTURE;

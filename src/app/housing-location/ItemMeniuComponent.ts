@@ -21,19 +21,25 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       <div class="listing-location">
         <p>{{ SelectDacaPret() }}</p>
         <p>{{ SelectDacaBucata() }}</p>
-        <p>
-          {{ housingLocation.DISPONIBILITATE }}
-        </p>
+        <p>{{ housingLocation.DISPONIBILITATE }}</p>
       </div>
-      <a [routerLink]="['/details', housingLocation.IDMENIU]">Learn More</a>
+      <a [routerLink]="['/details', housingLocation.IDMENIU, urlstring]">
+        Learn More</a
+      >
     </section>
   `,
   styleUrls: ['./itemMeniuComponent.css'],
 })
 export class HousingLocationComponent {
+  urlstring = '';
   safeURL: SafeResourceUrl = '';
   @Input() housingLocation!: itemMeniu;
 
+  SelectLinkCorect() {
+    if (typeof this.housingLocation == 'undefined') this.urlstring = 'DETALII';
+    else this.urlstring = '';
+    console.log(this.urlstring);
+  }
   SelectDacaPret() {
     if (this.housingLocation.PUA_CANT_PORTIE == 0) return '';
     else return this.housingLocation.PUA_CANT_PORTIE + ' RON';
@@ -48,8 +54,10 @@ export class HousingLocationComponent {
   ngOnInit() {
     let unsafeURL = `data: image/png;base64, ${this.housingLocation.PICTURE}`;
 
-    console.log(unsafeURL);
-    console.log(typeof this.housingLocation.PICTURE);
+    this.SelectLinkCorect();
+    // console.log(unsafeURL);
+    // console.log(typeof this.housingLocation.PICTURE);
+    // console.log(this.housingLocation);
     this.safeURL = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeURL);
   }
 }
