@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HousingService } from '../housing.service';
 import { itemMeniu } from '../housinglocation';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Router, NavigationEnd } from '@angular/router';
+import * as fct from '../housing-location/ItemMeniuComponent';
 @Component({
   selector: 'app-details',
   standalone: true,
@@ -13,25 +15,26 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
     <article>
       <img
         class="listing-photo"
-        src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-        alt="Exterior photo of {{ housingLocation?.DENUMIRE }}"
+        [src]="safeURL"
+        alt="De ce nu vrei sa bagi poza bro?"
       />
 
       <section class="listing-description">
-        <h2 class="listing-heading">{{ housingLocation?.DENUMIRE }}</h2>
+        <h2 class="listing-heading">{{ housingLocation.DENUMIRE }}</h2>
         <p class="listing-location">
-          {{ housingLocation?.DENUMIRE }}, {{ housingLocation?.DENUMIRE }}
+          {{ SelectDacaBucata() }},
+          {{ SelectDacaPret() }}
         </p>
       </section>
       <section class="listing-features">
-        <h2 class="section-heading">About this housing location</h2>
+        <h2 class="section-heading">Despre acest produs din meniu</h2>
         <ul>
-          <p>pret</p>
-          <p>descriere</p>
-          <p>poza</p>
-          <p>cantitate portie</p>
+          <p>{{ housingLocation.DESCRIERE }}</p>
+          <p>{{ housingLocation.INGREDIENTE }}</p>
+          <p>{{ housingLocation.LISTA_ALERGENI }}</p>
         </ul>
       </section>
+      <!--
       <section class="listing-apply">
         <h2 class="section-heading">Apply now to live here</h2>
         <form [formGroup]="applyForm" (submit)="submitApplication()">
@@ -46,35 +49,52 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
           <button type="submit" class="primary">Apply now</button>
         </form>
       </section>
-    </article>
+--></article>
   `,
   styleUrls: ['./details.component.css'],
 })
 export class DetailsComponent {
+  safeURL: SafeResourceUrl = '';
   route: ActivatedRoute = inject(ActivatedRoute);
-  housingService = inject(HousingService);
-  housingLocation: itemMeniu | undefined;
-
+  housingService: HousingService = inject(HousingService);
+  housingLocation: itemMeniu = {} as itemMeniu;
   applyForm = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
     email: new FormControl(''),
   });
 
-  /*
-  constructor() {
+  SelectDacaPret() {
+    if (this.housingLocation.PUA_CANT_PORTIE == 0) return '';
+    else return this.housingLocation.PUA_CANT_PORTIE + ' RON';
+  }
+  SelectDacaBucata() {
+    if (this.housingLocation.CANT_PORTIE == 0) return this.housingLocation.UM;
+    else
+      return this.housingLocation.CANT_PORTIE + ' ' + this.housingLocation.UM;
+  }
+  constructor(private sanitizer: DomSanitizer) {
     const housingLocationId = Number(this.route.snapshot.params['id']);
-    //this.housingLocation = this.housingService.getHousingLocationById(housingLocationId);
-  }*/
-
-  constructor() {
-    const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
-    /* this.housingService
-      .getHousingLocationById(housingLocationId)
+    console.log(housingLocationId);
+    this.housingService
+      .getItemDetaliiByID(housingLocationId)
       .then((housingLocation) => {
         this.housingLocation = housingLocation;
-      });*/
+        console.log(housingLocation);
+      });
   }
+  ngOnInit() {
+    let unsafeURL = `data: image/png;base64, ${this.housingLocation.PICTURE}`;
+
+    console.log(unsafeURL);
+    console.log(typeof this.housingLocation.PICTURE);
+    this.safeURL = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeURL);
+  }
+
+  /*constructor() {
+    //  const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
+    console.log(this.housingLocation);
+  }*/
 
   submitApplication() {
     /*this.housingService.submitApplication(

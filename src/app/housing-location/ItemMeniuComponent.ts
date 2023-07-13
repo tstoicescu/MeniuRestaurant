@@ -3,7 +3,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { itemMeniu } from '../housinglocation';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
+//import {Input} from
 @Component({
   selector: 'app-housing-location',
   standalone: true,
@@ -14,16 +14,13 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
         class="listing-photo"
         j
         [src]="safeURL"
-        alt="Exterior photo of {{ housingLocation.DENUMIRE }}"
+        alt="Not Found"
+        onerror="this.src='assets/logo_restaurant.png';"
       />
       <h2 class="listing-heading">{{ housingLocation.DENUMIRE }}</h2>
       <div class="listing-location">
-        <p>
-          {{ housingLocation.DESCRIERE }}
-        </p>
-        <p>
-          {{ housingLocation.CANT_PORTIE }}
-        </p>
+        <p>{{ SelectDacaPret() }}</p>
+        <p>{{ SelectDacaBucata() }}</p>
         <p>
           {{ housingLocation.DISPONIBILITATE }}
         </p>
@@ -31,15 +28,23 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
       <a [routerLink]="['/details', housingLocation.IDMENIU]">Learn More</a>
     </section>
   `,
-  styleUrls: ['./housing-location.component.css'],
+  styleUrls: ['./itemMeniuComponent.css'],
 })
 export class HousingLocationComponent {
   safeURL: SafeResourceUrl = '';
   @Input() housingLocation!: itemMeniu;
 
-  constructor(private sanitizer: DomSanitizer) {
-    console.log('Merge constructoru frati');
+  SelectDacaPret() {
+    if (this.housingLocation.PUA_CANT_PORTIE == 0) return '';
+    else return this.housingLocation.PUA_CANT_PORTIE + ' RON';
   }
+  SelectDacaBucata() {
+    if (this.housingLocation.CANT_PORTIE == 0) return this.housingLocation.UM;
+    else
+      return this.housingLocation.CANT_PORTIE + ' ' + this.housingLocation.UM;
+  }
+
+  constructor(private sanitizer: DomSanitizer) {}
   ngOnInit() {
     let unsafeURL = `data: image/png;base64, ${this.housingLocation.PICTURE}`;
 

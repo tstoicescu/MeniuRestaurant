@@ -127,7 +127,7 @@ export class HousingService {
   credentials = 'admin:123';
   //'http://proiecte.datalight.ro/DataLight/restaurant/meniu?IDMagazin=1&$FORMAT=json&$SELECT=IDMENIU,IDMENIU_PARINTE,DENUMIRE,DENUMIRE_PARINTE,CODMRF,DESCRIERE,INGREDIENTE,CANT_PORTIE,NRPICT,LISTA_ALERGENI,DISPONIBILITATE,COMPOZITIE100_PROTIDE,COMPOZITIE100_LIPIDE,COMPOZITIE100_GLUCIDE,COMPOZITIE100_CALORII';
   url =
-    'http://proiecte.datalight.ro/DataLight/restaurant/meniu?IDMagazin=1&$FORMAT=json&$SELECT=IDMENIU,IDMENIU_PARINTE,DENUMIRE,DENUMIRE_PARINTE,CODMRF,DESCRIERE,INGREDIENTE,CANT_PORTIE,NRPICT,LISTA_ALERGENI,DISPONIBILITATE,COMPOZITIE100_PROTIDE,COMPOZITIE100_LIPIDE,COMPOZITIE100_GLUCIDE,COMPOZITIE100_CALORII';
+    'http://proiecte.datalight.ro/DataLight/restaurant/meniu?IDMagazin=1&$FORMAT=json&$SELECT=IDMENIU,IDMENIU_PARINTE,DENUMIRE,DENUMIRE_PARINTE,CODMRF,DESCRIERE,INGREDIENTE,CANT_PORTIE,PUA_CANT_PORTIE,NRPICT,LISTA_ALERGENI,DISPONIBILITATE,COMPOZITIE100_PROTIDE,COMPOZITIE100_LIPIDE,COMPOZITIE100_GLUCIDE,COMPOZITIE100_CALORII,UM';
   async getAllHousingLocations(): Promise<itemMeniu[]> {
     const filt = '&$FILTER=IDMENIU_PARINTE eq 0';
     const inturl = this.url + filt;
@@ -219,6 +219,42 @@ export class HousingService {
 
     //results[0].PICTURE = data.d.results[0].PICTURE;
     return results;
+  }
+
+  async getItemDetaliiByID(id: number): Promise<itemMeniu> {
+    const filt = '&$FILTER=IDMENIU eq ' + id;
+    const inturl = this.url + filt;
+    const credentials = 'admin:123';
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic ' + btoa(credentials));
+
+    const options: RequestInit = {
+      method: 'GET',
+      headers: headers,
+    };
+
+    let response = await fetch(inturl, options);
+    // console.log(response);
+    let data = await response.json();
+
+    // const results = data && data.results ? data.results : [];
+    const results = data.d.results;
+    var nrpict = +results[0].NRPICT;
+
+    if (nrpict > 0) {
+      console.log('Are poze!');
+
+      let picurl =
+        'http://proiecte.datalight.ro/DataLight/restaurant/MeniuPictures?IDMeniu=' +
+        results[0].IDMENIU +
+        '&$FORMAT=json&$SELECT=PICTURE';
+      response = await fetch(picurl, options);
+      data = await response.json();
+      results[0].PICTURE = data.d.results[0].PICTURE;
+    }
+
+    console.log(results[0]);
+    return results[0];
   }
 
   submitApplication(firstName: string, lastName: string, email: string) {

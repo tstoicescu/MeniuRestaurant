@@ -13,6 +13,11 @@ const routeConfig: Routes = [
     component: HomeDepthComponent,
     title: 'Home details',
   },
+  {
+    path: 'details/:id/TEST',
+    component: DetailsComponent,
+    title: 'App details',
+  },
 ];
 
 export default routeConfig;

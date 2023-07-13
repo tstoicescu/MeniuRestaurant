@@ -3,8 +3,10 @@ export interface itemMeniu {
   IDMENIU_PARINTE: number;
   DENUMIRE: string;
   DENUMIRE_PARINTE: string;
+  UM: string;
   CODMRF: number;
   DESCRIERE: string;
+  PUA_CANT_PORTIE: number;
   INGREDIENTE: string;
   CANT_PORTIE: number;
   NRPICT: number;
