@@ -1,16 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HousingLocationComponent } from '../housing-location/ItemMeniuComponent';
-import { itemMeniu } from '../housinglocation';
-import { MenuItem } from '../menuitem';
-import { HousingService } from '../housing.service';
+import { MenuItemComponent } from '../item-menu/ItemMeniuComponent';
+import { itemMeniu } from '../itemMeniu';
+import { MenuService } from '../menuService';
 import { ActivatedRoute } from '@angular/router';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HousingLocationComponent],
+  imports: [CommonModule, MenuItemComponent],
   template: `
     <section>
       <form>
@@ -26,8 +25,8 @@ import { Router, NavigationEnd } from '@angular/router';
     </section>
     <section class="results">
       <app-housing-location
-        *ngFor="let housingLocation of filteredLocationList"
-        [housingLocation]="housingLocation"
+        *ngFor="let menuItem of filteredMenuItemList"
+        [itemMeniu]="menuItem"
       >
       </app-housing-location>
     </section>
@@ -36,32 +35,29 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class HomeDepthComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
-  housingService: HousingService = inject(HousingService);
-  housingLocationList: itemMeniu[] = [];
-  filteredLocationList: itemMeniu[] = [];
+  menuService: MenuService = inject(MenuService);
+  menuItemList: itemMeniu[] = [];
+  filteredMenuItemList: itemMeniu[] = [];
 
   filterResults(text: string) {
     if (!text) {
-      this.filteredLocationList = this.housingLocationList;
+      this.filteredMenuItemList = this.menuItemList;
     }
 
-    this.filteredLocationList = this.housingLocationList.filter(
-      (housingLocation) =>
-        housingLocation?.DENUMIRE.toLowerCase().includes(text.toLowerCase())
+    this.filteredMenuItemList = this.menuItemList.filter((menuItem) =>
+      menuItem?.DENUMIRE.toLowerCase().includes(text.toLowerCase())
     );
   }
   constructor(private router: Router) {
-    const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
-    this.housingService
-      .getHousingLocationById(housingLocationId)
-      .then((housingLocationList) => {
-        this.housingLocationList = housingLocationList;
-        console.log(housingLocationList);
+    const menuItemID = parseInt(this.route.snapshot.params['id'], 10);
+    this.menuService.getMenuItemById(menuItemID).then((menuItemList) => {
+      this.menuItemList = menuItemList;
+      console.log(menuItemList);
 
-        this.filteredLocationList = housingLocationList;
-        if (this.housingLocationList.length == 0)
-          document.location.href = document.location.href + '/DETALII';
-      });
+      this.filteredMenuItemList = menuItemList;
+      if (this.menuItemList.length == 0)
+        document.location.href = document.location.href + '/DETALII';
+    });
     /*const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById();*/
   }

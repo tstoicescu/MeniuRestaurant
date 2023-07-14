@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { itemMeniu } from '../housinglocation';
+import { itemMeniu } from '../itemMeniu';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 //import {Input} from
 @Component({
@@ -17,44 +17,45 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
         alt="Not Found"
         onerror="this.src='assets/logo_restaurant.png';"
       />
-      <h2 class="listing-heading">{{ housingLocation.DENUMIRE }}</h2>
+      <h2 class="listing-heading">{{ itemMeniu.DENUMIRE }}</h2>
       <div class="listing-location">
-        <p>{{ SelectDacaPret() }}</p>
-        <p>{{ SelectDacaBucata() }}</p>
-        <p>{{ housingLocation.DISPONIBILITATE }}</p>
+        <p>{{ SelectIfPrice() }}</p>
+        <p>{{ SelectIfBucata() }}</p>
+        <p>{{ itemMeniu.DISPONIBILITATE }}</p>
       </div>
-      <a [routerLink]="['/details', housingLocation.IDMENIU, urlstring]">
+      <a [routerLink]="['/details', itemMeniu.IDMENIU, urlstring]">
         Learn More</a
       >
     </section>
   `,
   styleUrls: ['./itemMeniuComponent.css'],
 })
-export class HousingLocationComponent {
+export class MenuItemComponent {
   urlstring = '';
   safeURL: SafeResourceUrl = '';
-  @Input() housingLocation!: itemMeniu;
+  @Input() itemMeniu!: itemMeniu;
 
-  SelectLinkCorect() {
-    if (typeof this.housingLocation == 'undefined') this.urlstring = 'DETALII';
+  //Functii pentru a filtra informatii corecte spre a fi afisate.
+  SelectCorrectLink() {
+    if (typeof this.itemMeniu == 'undefined') this.urlstring = 'DETALII';
     else this.urlstring = '';
     console.log(this.urlstring);
   }
-  SelectDacaPret() {
-    if (this.housingLocation.PUA_CANT_PORTIE == 0) return '';
-    else return this.housingLocation.PUA_CANT_PORTIE + ' RON';
+  SelectIfPrice() {
+    if (this.itemMeniu.PUA_CANT_PORTIE == 0) return '';
+    else return this.itemMeniu.PUA_CANT_PORTIE + ' RON';
   }
-  SelectDacaBucata() {
-    if (this.housingLocation.CANT_PORTIE == 0) return this.housingLocation.UM;
-    else
-      return this.housingLocation.CANT_PORTIE + ' ' + this.housingLocation.UM;
+  SelectIfBucata() {
+    if (this.itemMeniu.CANT_PORTIE == 0) return this.itemMeniu.UM;
+    else return this.itemMeniu.CANT_PORTIE + ' ' + this.itemMeniu.UM;
   }
 
   constructor(private sanitizer: DomSanitizer) {}
   ngOnInit() {
-    let unsafeURL = `data: image/png;base64, ${this.housingLocation.PICTURE}`;
+    //ocolim protocoalele de securitate pentru datele pozei.
+    let unsafeURL = `data: image/png;base64, ${this.itemMeniu.PICTURE}`;
 
-    this.SelectLinkCorect();
+    this.SelectCorrectLink();
     // console.log(unsafeURL);
     // console.log(typeof this.housingLocation.PICTURE);
     // console.log(this.housingLocation);

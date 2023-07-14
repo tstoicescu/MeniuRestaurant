@@ -1,14 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HousingLocationComponent } from '../housing-location/ItemMeniuComponent';
-import { itemMeniu } from '../housinglocation';
-import { MenuItem } from '../menuitem';
-import { HousingService } from '../housing.service';
+import { MenuItemComponent } from '../item-menu/ItemMeniuComponent';
+import { itemMeniu } from '../itemMeniu';
+import { MenuService } from '../menuService';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HousingLocationComponent],
+  imports: [CommonModule, MenuItemComponent],
   template: `
     <section>
       <form>
@@ -24,8 +23,8 @@ import { HousingService } from '../housing.service';
     </section>
     <section class="results">
       <app-housing-location
-        *ngFor="let housingLocation of filteredLocationList"
-        [housingLocation]="housingLocation"
+        *ngFor="let menuItm of filteredmenuItmList"
+        [itemMeniu]="menuItm"
       >
       </app-housing-location>
     </section>
@@ -33,18 +32,17 @@ import { HousingService } from '../housing.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  housingLocationList: itemMeniu[] = [];
-  housingService: HousingService = inject(HousingService);
-  filteredLocationList: itemMeniu[] = [];
+  menuItmList: itemMeniu[] = [];
+  menuService: MenuService = inject(MenuService);
+  filteredmenuItmList: itemMeniu[] = [];
 
   filterResults(text: string) {
     if (!text) {
-      this.filteredLocationList = this.housingLocationList;
+      this.filteredmenuItmList = this.menuItmList;
     }
 
-    this.filteredLocationList = this.housingLocationList.filter(
-      (housingLocation) =>
-        housingLocation?.DENUMIRE.toLowerCase().includes(text.toLowerCase())
+    this.filteredmenuItmList = this.menuItmList.filter((menuItm) =>
+      menuItm?.DENUMIRE.toLowerCase().includes(text.toLowerCase())
     );
   }
   /*
@@ -54,12 +52,10 @@ export class HomeComponent {
   }*/
 
   constructor() {
-    this.housingService
-      .getAllHousingLocations()
-      .then((housingLocationList: itemMeniu[]) => {
-        this.housingLocationList = housingLocationList;
-        this.filteredLocationList = housingLocationList;
-      });
+    this.menuService.getAllMenuItems().then((menuItmList: itemMeniu[]) => {
+      this.menuItmList = menuItmList;
+      this.filteredmenuItmList = menuItmList;
+    });
     /*const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById();*/
   }
