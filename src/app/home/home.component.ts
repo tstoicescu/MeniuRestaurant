@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MenuItemComponent } from '../item-menu/ItemMeniuComponent';
 import { itemMeniu } from '../itemMeniu';
 import { MenuService } from '../menuService';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 
 @Component({
   selector: 'app-home',
