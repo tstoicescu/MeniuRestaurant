@@ -14,10 +14,16 @@ import { Router, NavigationEnd } from '@angular/router';
     <section>
       <form>
         <input type="text" placeholder="Filter by city" #filter />
+        <input
+          type="text"
+          placeholder="nu include alergenii"
+          #filter_alergeni
+        />
+
         <button
           class="primary"
           type="button"
-          (click)="filterResults(filter.value)"
+          (click)="filterResults(filter.value, filter_alergeni.value)"
         >
           Search
         </button>
@@ -39,16 +45,23 @@ export class HomeDepthComponent {
   menuItemList: itemMeniu[] = [];
   filteredMenuItemList: itemMeniu[] = [];
 
-  filterResults(text: string) {
-    if (!text) {
+  filterResults(text: string, text_alergeni: string) {
+    if (!text && !text_alergeni) {
       this.filteredMenuItemList = this.menuItemList;
     }
 
-    this.filteredMenuItemList = this.menuItemList.filter((menuItem) =>
-      menuItem?.DENUMIRE.toLowerCase().includes(text.toLowerCase())
+    this.filteredMenuItemList = this.menuItemList.filter(
+      (menuItem) =>
+        (menuItem?.DENUMIRE.toLowerCase().includes(text.toLowerCase()) ||
+          text.trim().length == 0) &&
+        (!menuItem?.LISTA_ALERGENI.toLowerCase().includes(
+          text_alergeni.toLowerCase()
+        ) ||
+          text_alergeni.trim().length == 0)
     );
   }
   //preluam ID-ul item-ului din meniu din router si initializam lista cu iteme din meniu.
+
   constructor(private router: Router) {
     const menuItemID = parseInt(this.route.snapshot.params['id'], 10);
     this.menuService.getMenuItemById(menuItemID).then((menuItemList) => {

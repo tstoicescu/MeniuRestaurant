@@ -19,6 +19,7 @@ import { HtmlParser } from '@angular/compiler';
         onerror="this.src='assets/logo_restaurant.png';"
       />
       <h2 class="listing-heading">{{ itemMeniu.DENUMIRE }}</h2>
+      <p>{{ itemMeniu.LISTA_ALERGENI }}</p>
       <div class="listing-location">
         <p>{{ SelectIfPrice() }}</p>
         <p>{{ SelectIfBucata() }}</p>
