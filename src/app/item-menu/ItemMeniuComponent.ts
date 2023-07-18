@@ -3,6 +3,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { itemMeniu } from '../itemMeniu';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HtmlParser } from '@angular/compiler';
 //import {Input} from
 @Component({
   selector: 'app-housing-location',
@@ -23,24 +24,25 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
         <p>{{ SelectIfBucata() }}</p>
         <p>{{ itemMeniu.DISPONIBILITATE }}</p>
       </div>
-      <a [routerLink]="['/details', itemMeniu.IDMENIU, urlstring]">
-        Learn More</a
-      >
+      <div class="linkul">
+        <a [routerLink]="[route, itemMeniu.IDMENIU]"> Learn More </a>
+      </div>
+      <!--<a [routerLink]="['/details', itemMeniu.IDMENIU]"> Learn More </a> -->
     </section>
   `,
   styleUrls: ['./itemMeniuComponent.css'],
 })
 export class MenuItemComponent {
-  urlstring = '';
   safeURL: SafeResourceUrl = '';
+  innerHTML: string = `<p>Hello, world!</p>`;
+  route = '/details';
   @Input() itemMeniu!: itemMeniu;
 
-  //Functii pentru a filtra informatii corecte spre a fi afisate.
-  SelectCorrectLink() {
-    if (typeof this.itemMeniu == 'undefined') this.urlstring = 'DETALII';
-    else this.urlstring = '';
-    console.log(this.urlstring);
+  //Selectam linkul corect spre a fi construit
+  SelectRoute() {
+    if (this.itemMeniu.CODMRF != 0) this.route = '/menudetails';
   }
+  //Functii pentru a filtra informatii corecte spre a fi afisate.
   SelectIfPrice() {
     if (this.itemMeniu.PUA_CANT_PORTIE == 0) return '';
     else return this.itemMeniu.PUA_CANT_PORTIE + ' RON';
@@ -50,15 +52,16 @@ export class MenuItemComponent {
     else return this.itemMeniu.CANT_PORTIE + ' ' + this.itemMeniu.UM;
   }
 
+  //folosim domsanitizer pentru a trece de protocoalele de securitate.
   constructor(private sanitizer: DomSanitizer) {}
   ngOnInit() {
     //ocolim protocoalele de securitate pentru datele pozei.
     let unsafeURL = `data: image/png;base64, ${this.itemMeniu.PICTURE}`;
-
-    this.SelectCorrectLink();
     // console.log(unsafeURL);
     // console.log(typeof this.housingLocation.PICTURE);
     // console.log(this.housingLocation);
     this.safeURL = this.sanitizer.bypassSecurityTrustResourceUrl(unsafeURL);
+    //Selectam ruta corespunzatoare.
+    this.SelectRoute();
   }
 }

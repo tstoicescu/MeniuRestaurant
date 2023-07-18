@@ -48,6 +48,7 @@ export class HomeDepthComponent {
       menuItem?.DENUMIRE.toLowerCase().includes(text.toLowerCase())
     );
   }
+  //preluam ID-ul item-ului din meniu din router si initializam lista cu iteme din meniu.
   constructor(private router: Router) {
     const menuItemID = parseInt(this.route.snapshot.params['id'], 10);
     this.menuService.getMenuItemById(menuItemID).then((menuItemList) => {
@@ -55,12 +56,18 @@ export class HomeDepthComponent {
       console.log(menuItemList);
 
       this.filteredMenuItemList = menuItemList;
-      if (this.menuItemList.length == 0)
-        document.location.href = document.location.href + '/DETALII';
+      //metoda workaround pentru a intra in meniul de detalii
+      /*
+      if (this.menuItemList.length == 0) {
+        this.router.navigate(['DETALII'], {
+          relativeTo: this.route,
+        });
+      }*/
     });
     /*const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById();*/
   }
+  //dam refresh la pagina automat.
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

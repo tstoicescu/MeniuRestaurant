@@ -9,9 +9,11 @@ export class MenuService {
   credentials = 'admin:123';
   constructor() {}
 
+  //url-ul pe care il prelucram pentru a prelua datele dupa site
   //'http://proiecte.datalight.ro/DataLight/restaurant/meniu?IDMagazin=1&$FORMAT=json&$SELECT=IDMENIU,IDMENIU_PARINTE,DENUMIRE,DENUMIRE_PARINTE,CODMRF,DESCRIERE,INGREDIENTE,CANT_PORTIE,NRPICT,LISTA_ALERGENI,DISPONIBILITATE,COMPOZITIE100_PROTIDE,COMPOZITIE100_LIPIDE,COMPOZITIE100_GLUCIDE,COMPOZITIE100_CALORII';
   url =
     'http://proiecte.datalight.ro/DataLight/restaurant/meniu?IDMagazin=1&$FORMAT=json&$SELECT=IDMENIU,IDMENIU_PARINTE,DENUMIRE,DENUMIRE_PARINTE,CODMRF,DESCRIERE,INGREDIENTE,CANT_PORTIE,PUA_CANT_PORTIE,NRPICT,LISTA_ALERGENI,DISPONIBILITATE,COMPOZITIE100_PROTIDE,COMPOZITIE100_LIPIDE,COMPOZITIE100_GLUCIDE,COMPOZITIE100_CALORII,UM';
+  //functie asincrona ce preia toate itemele din meniu.
   async getAllMenuItems(): Promise<itemMeniu[]> {
     const filt = '&$FILTER=IDMENIU_PARINTE eq 0';
     const inturl = this.url + filt;
@@ -57,6 +59,7 @@ export class MenuService {
     return results;
   }*/
 
+  //functie asincrona pentru a prelua un item din meniu, dupa ID
   async getMenuItemById(id: number): Promise<itemMeniu[]> {
     /*console.log(`${this.url}/${id}`);
     const data = await fetch(`${this.url}/${id}`);
@@ -103,6 +106,7 @@ export class MenuService {
     return results;
   }
 
+  //Functie pentru a prelua detaliile unui item dupa ID
   async getItemDetailsByID(id: number): Promise<itemMeniu> {
     const filt = '&$FILTER=IDMENIU eq ' + id;
     const inturl = this.url + filt;
@@ -124,7 +128,6 @@ export class MenuService {
 
     if (nrpict > 0) {
       console.log('Are poze!');
-
       let picurl =
         'http://proiecte.datalight.ro/DataLight/restaurant/MeniuPictures?IDMeniu=' +
         results[0].IDMENIU +

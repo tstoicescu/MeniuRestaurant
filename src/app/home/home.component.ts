@@ -51,6 +51,7 @@ export class HomeComponent {
     this.filteredLocationList = this.housingLocationList;
   }*/
 
+  //initializam lista itemelor din meniu.
   constructor() {
     this.menuService.getAllMenuItems().then((menuItmList: itemMeniu[]) => {
       this.menuItmList = menuItmList;
