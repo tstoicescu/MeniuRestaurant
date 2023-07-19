@@ -45,6 +45,26 @@ export class HomeDepthComponent {
   menuItemList: itemMeniu[] = [];
   filteredMenuItemList: itemMeniu[] = [];
 
+
+  countries: Array<any> = [];
+  selCountries = [
+    {
+      item_id: 1,
+      item_text: "India",
+      image: "http://www.sciencekids.co.nz/images/pictures/flags96/India.jpg"
+    },
+    {
+      item_id: 5,
+      item_text: "Israel",
+      image: "http://www.sciencekids.co.nz/images/pictures/flags96/Israel.jpg"
+    }
+  ];
+  dropdownSettings: any = {};
+
+
+
+
+
   filterResults(text: string, text_alergeni: string) {
     if (!text && !text_alergeni) {
       this.filteredMenuItemList = this.menuItemList;
@@ -80,6 +100,9 @@ export class HomeDepthComponent {
     /*const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById();*/
   }
+
+
+
   //dam refresh la pagina automat.
   ngOnInit() {
     this.router.events.subscribe((event) => {
@@ -87,5 +110,58 @@ export class HomeDepthComponent {
         window.location.reload();
       }
     });
+
+    // vector cu tarile din exemplul cu dropdown multiplu
+    // la implementare pe datele noastre trebuie sa il eliminam de aici
+    this.countries = [
+      {
+        item_id: 1,
+        item_text: "India",
+        image: "http://www.sciencekids.co.nz/images/pictures/flags96/India.jpg"
+      },
+      {
+        item_id: 2,
+        item_text: "Spain",
+        image: "http://www.sciencekids.co.nz/images/pictures/flags96/Spain.jpg"
+      },
+      {
+        item_id: 3,
+        item_text: "United Kingdom",
+        image:
+          "http://www.sciencekids.co.nz/images/pictures/flags96/United_Kingdom.jpg"
+      },
+      {
+        item_id: 4,
+        item_text: "Canada",
+        image:
+          "http://www.sciencekids.co.nz/images/pictures/flags96/Canada.jpg",
+        isDisabled: true
+      },
+      {
+        item_id: 5,
+        item_text: "Israel",
+        image: "http://www.sciencekids.co.nz/images/pictures/flags96/Israel.jpg"
+      },
+      {
+        item_id: 6,
+        item_text: "Brazil",
+        image: "http://www.sciencekids.co.nz/images/pictures/flags96/Brazil.jpg"
+      },
+      {
+        item_id: 7,
+        item_text: "Barbados",
+        image:
+          "http://www.sciencekids.co.nz/images/pictures/flags96/Barbados.jpg"
+      },
+      {
+        item_id: 8,
+        item_text: "Mexico",
+        image: "http://www.sciencekids.co.nz/images/pictures/flags96/Mexico.jpg"
+      }
+    ];
   }
+
+
+
+
 }
