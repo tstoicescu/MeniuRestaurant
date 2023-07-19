@@ -3,18 +3,21 @@
  *  Protractor is used in this example for compatibility with Angular documentation tools.
  */
 
+import { AppModule } from './app/app.module';
 import {
   bootstrapApplication,
   provideProtractorTestingSupport,
 } from '@angular/platform-browser';
-
 import { HttpClientModule } from '@angular/common/http';
-
 import { AppComponent } from './app/app.component';
 import { provideRouter } from '@angular/router';
 import routeConfig from './app/routes';
-import { AppModule } from './app/app.module';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
-bootstrapApplication(AppComponent, {
-  providers: [provideProtractorTestingSupport(), provideRouter(routeConfig)],
+
+bootstrapApplication(
+  AppComponent,
+    {
+  providers: [provideProtractorTestingSupport(), provideRouter(routeConfig), provideAnimations()],
 }).catch((err) => console.error(err));
+

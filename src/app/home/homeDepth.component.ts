@@ -6,19 +6,34 @@ import { MenuService } from '../menuService';
 import { ActivatedRoute } from '@angular/router';
 import { Router, NavigationEnd } from '@angular/router';
 
+import { FormControl } from '@angular/forms';
+import {NgFor} from '@angular/common';
+import { MatSelectModule }  from '@angular/material/select'; 
+import { MatFormFieldModule }  from '@angular/material/form-field'; 
+
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MenuItemComponent],
+  imports: [MatFormFieldModule, MatSelectModule, NgFor, CommonModule, MenuItemComponent],
   template: `
     <section>
-      <form>
+    <form>
         <input type="text" placeholder="Filter by city" #filter />
         <input
           type="text"
           placeholder="nu include alergenii"
           #filter_alergeni
         />
+
+        <!--mat-form-field>
+  <mat-label>Toppings</mat-label-->
+  <mat-select  multiple>
+    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+  </mat-select>
+  <!--/mat-form-field-->
+
+
 
         <button
           class="primary"
@@ -27,11 +42,11 @@ import { Router, NavigationEnd } from '@angular/router';
         >
           Search
         </button>
-      </form>
+        </form>
     </section>
     <section class="results">
       <app-housing-location
-        *ngFor="let menuItem of filteredMenuItemList"
+      *ngFor="let menuItem of filteredMenuItemList"
         [itemMeniu]="menuItem"
       >
       </app-housing-location>
@@ -39,6 +54,7 @@ import { Router, NavigationEnd } from '@angular/router';
   `,
   styleUrls: ['./home.component.css'],
 })
+
 export class HomeDepthComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   menuService: MenuService = inject(MenuService);
@@ -46,20 +62,8 @@ export class HomeDepthComponent {
   filteredMenuItemList: itemMeniu[] = [];
 
 
-  countries: Array<any> = [];
-  selCountries = [
-    {
-      item_id: 1,
-      item_text: "India",
-      image: "http://www.sciencekids.co.nz/images/pictures/flags96/India.jpg"
-    },
-    {
-      item_id: 5,
-      item_text: "Israel",
-      image: "http://www.sciencekids.co.nz/images/pictures/flags96/Israel.jpg"
-    }
-  ];
-  //dropdownSettings: any = {};
+  toppings = new FormControl('');
+  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 
 
   /*
@@ -97,7 +101,7 @@ export class HomeDepthComponent {
           vIncludeInLista = menuItem?.DENUMIRE.toLowerCase().includes(text.toLowerCase());
         
         // daca elementul trebuie inclus, facem testul cu aleregnii
-        if (vIncludeInLista && text_alergeni.trim().length > 0);
+        if (vIncludeInLista && text_alergeni.trim().length > 0)
           vIncludeInLista = !menuItem?.LISTA_ALERGENI.toLowerCase().includes(text_alergeni.toLowerCase());
 
         return vIncludeInLista;
@@ -138,54 +142,7 @@ export class HomeDepthComponent {
       }
     });
 
-    // vector cu tarile din exemplul cu dropdown multiplu
-    // la implementare pe datele noastre trebuie sa il eliminam de aici
-    this.countries = [
-      {
-        item_id: 1,
-        item_text: "India",
-        image: "http://www.sciencekids.co.nz/images/pictures/flags96/India.jpg"
-      },
-      {
-        item_id: 2,
-        item_text: "Spain",
-        image: "http://www.sciencekids.co.nz/images/pictures/flags96/Spain.jpg"
-      },
-      {
-        item_id: 3,
-        item_text: "United Kingdom",
-        image:
-          "http://www.sciencekids.co.nz/images/pictures/flags96/United_Kingdom.jpg"
-      },
-      {
-        item_id: 4,
-        item_text: "Canada",
-        image:
-          "http://www.sciencekids.co.nz/images/pictures/flags96/Canada.jpg",
-        isDisabled: true
-      },
-      {
-        item_id: 5,
-        item_text: "Israel",
-        image: "http://www.sciencekids.co.nz/images/pictures/flags96/Israel.jpg"
-      },
-      {
-        item_id: 6,
-        item_text: "Brazil",
-        image: "http://www.sciencekids.co.nz/images/pictures/flags96/Brazil.jpg"
-      },
-      {
-        item_id: 7,
-        item_text: "Barbados",
-        image:
-          "http://www.sciencekids.co.nz/images/pictures/flags96/Barbados.jpg"
-      },
-      {
-        item_id: 8,
-        item_text: "Mexico",
-        image: "http://www.sciencekids.co.nz/images/pictures/flags96/Mexico.jpg"
-      }
-    ];
+    
   }
 
 
