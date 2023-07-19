@@ -59,12 +59,10 @@ export class HomeDepthComponent {
       image: "http://www.sciencekids.co.nz/images/pictures/flags96/Israel.jpg"
     }
   ];
-  dropdownSettings: any = {};
+  //dropdownSettings: any = {};
 
 
-
-
-
+  /*
   filterResults(text: string, text_alergeni: string) {
     if (!text && !text_alergeni) {
       this.filteredMenuItemList = this.menuItemList;
@@ -80,8 +78,37 @@ export class HomeDepthComponent {
           text_alergeni.trim().length == 0)
     );
   }
-  //preluam ID-ul item-ului din meniu din router si initializam lista cu iteme din meniu.
+  */
+  
 
+
+  
+  filterResults(text: string, text_alergeni: string) {
+    if (!text && !text_alergeni) {
+      this.filteredMenuItemList = this.menuItemList;
+    }
+
+    this.filteredMenuItemList = this.menuItemList.filter(
+      (menuItem) => {
+        let vIncludeInLista = true;
+
+        // testam includerea dupa descriere
+        if (text.trim().length > 0 )
+          vIncludeInLista = menuItem?.DENUMIRE.toLowerCase().includes(text.toLowerCase());
+        
+        // daca elementul trebuie inclus, facem testul cu aleregnii
+        if (vIncludeInLista && text_alergeni.trim().length > 0);
+          vIncludeInLista = !menuItem?.LISTA_ALERGENI.toLowerCase().includes(text_alergeni.toLowerCase());
+
+        return vIncludeInLista;
+        }
+    );
+  }
+  
+  
+
+
+  //preluam ID-ul item-ului din meniu din router si initializam lista cu iteme din meniu.
   constructor(private router: Router) {
     const menuItemID = parseInt(this.route.snapshot.params['id'], 10);
     this.menuService.getMenuItemById(menuItemID).then((menuItemList) => {
