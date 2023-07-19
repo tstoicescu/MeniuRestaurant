@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { itemMeniu } from '../housinglocation';
+import { itemMeniu } from '../itemMeniu';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 //import {Input} from
 @Component({
