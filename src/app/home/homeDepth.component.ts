@@ -16,7 +16,7 @@ import { Router, NavigationEnd } from '@angular/router';
         <input type="text" placeholder="Filter by city" #filter />
         <input
           type="text"
-          placeholder="nu include alergenii"
+          placeholder="Enter allergens separated by commas"
           #filter_alergeni
         />
 
@@ -44,7 +44,9 @@ export class HomeDepthComponent {
   menuService: MenuService = inject(MenuService);
   menuItemList: itemMeniu[] = [];
   filteredMenuItemList: itemMeniu[] = [];
-
+  initialMenuItemList: itemMeniu[] = []; // Store the initial list of menu items
+  cityFilter: string = ''; // City filter input value
+  allergenFilter: string = ''; // Allergen filter input value
 
   countries: Array<any> = [];
   selCountries = [
@@ -84,9 +86,14 @@ export class HomeDepthComponent {
 
   
   filterResults(text: string, text_alergeni: string) {
+    
     if (!text && !text_alergeni) {
-      this.filteredMenuItemList = this.menuItemList;
+      this.filteredMenuItemList = this.initialMenuItemList; // Display the initial list without any filters
+      return; //Exit the function early
     }
+
+    const allergensList = this.convertStringToList(text_alergeni); // Convert string to list
+    const cityList = this.convertStringToList(text);
 
     this.filteredMenuItemList = this.menuItemList.filter(
       (menuItem) => {
@@ -97,12 +104,20 @@ export class HomeDepthComponent {
           vIncludeInLista = menuItem?.DENUMIRE.toLowerCase().includes(text.toLowerCase());
         
         // daca elementul trebuie inclus, facem testul cu aleregnii
-        if (vIncludeInLista && text_alergeni.trim().length > 0);
-          vIncludeInLista = !menuItem?.LISTA_ALERGENI.toLowerCase().includes(text_alergeni.toLowerCase());
+        if (vIncludeInLista && text_alergeni.trim().length > 0)
+        // Check if any allergen in the list is present in the menuItem's allergens
+          vIncludeInLista = allergensList.every((allergen) => {
+            return !menuItem?.LISTA_ALERGENI.toLowerCase().includes(allergen.toLowerCase());
+          });
+        
 
         return vIncludeInLista;
         }
     );
+  }
+  convertStringToList(text_alergeni: string) {
+    // Remove leading/trailing spaces and split string by commas
+    return text_alergeni.trim().split(',').map((allergen) => allergen.trim());
   }
   
   
@@ -115,7 +130,11 @@ export class HomeDepthComponent {
       this.menuItemList = menuItemList;
       console.log(menuItemList);
 
+      
       this.filteredMenuItemList = menuItemList;
+      this.menuService.getMenuItemById(menuItemID).then((menuItemList) => {
+        this.menuItemList = menuItemList;
+        this.initialMenuItemList = menuItemList; })// Store the initial list
       //metoda workaround pentru a intra in meniul de detalii
       /*
       if (this.menuItemList.length == 0) {
@@ -124,6 +143,7 @@ export class HomeDepthComponent {
         });
       }*/
     });
+    
     /*const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById();*/
   }
@@ -137,7 +157,8 @@ export class HomeDepthComponent {
         window.location.reload();
       }
     });
-
+    clearFilters(); {
+      this.filteredMenuItemList = this.initialMenuItemList;} // Display the initial list without any filters
     // vector cu tarile din exemplul cu dropdown multiplu
     // la implementare pe datele noastre trebuie sa il eliminam de aici
     this.countries = [
@@ -192,3 +213,7 @@ export class HomeDepthComponent {
 
 
 }
+  function clearFilters() {
+    throw new Error('Function not implemented.');
+  }
+
