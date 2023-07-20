@@ -13,6 +13,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   template: `
     <article>
       <img
+        class="img"
         class="listing-photo"
         [src]="safeURL"
         alt="Nu s-a putut adauga poza."

@@ -8,17 +8,22 @@ import { Router, NavigationEnd } from '@angular/router';
 
 import { NgFor } from '@angular/common';
 import { FormControl } from '@angular/forms';
-import { MatSelectModule }  from '@angular/material/select'; 
-import { MatFormFieldModule }  from '@angular/material/form-field'; 
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [MatFormFieldModule, MatSelectModule, NgFor, CommonModule, MenuItemComponent],
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    NgFor,
+    CommonModule,
+    MenuItemComponent,
+  ],
   template: `
     <section>
-    <form>
+      <form>
         <input type="text" placeholder="Filter by city" #filter />
         <input
           type="text"
@@ -29,8 +34,10 @@ import { MatFormFieldModule }  from '@angular/material/form-field';
         <!--mat-form-field-->
         <div class="alergeni_box">
           <mat-label>Toppings</mat-label>
-          <mat-select  multiple>
-              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+          <mat-select multiple>
+            <mat-option *ngFor="let topping of toppingList" [value]="topping">{{
+              topping
+            }}</mat-option>
           </mat-select>
         </div>
         <!--/mat-form-field-->
@@ -42,11 +49,11 @@ import { MatFormFieldModule }  from '@angular/material/form-field';
         >
           Search
         </button>
-        </form>
+      </form>
     </section>
     <section class="results">
       <app-housing-location
-      *ngFor="let menuItem of filteredMenuItemList"
+        *ngFor="let menuItem of filteredMenuItemList"
         [itemMeniu]="menuItem"
       >
       </app-housing-location>
@@ -54,7 +61,6 @@ import { MatFormFieldModule }  from '@angular/material/form-field';
   `,
   styleUrls: ['./home.component.css'],
 })
-
 export class HomeDepthComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
   menuService: MenuService = inject(MenuService);
@@ -65,8 +71,14 @@ export class HomeDepthComponent {
   allergenFilter: string = ''; // Allergen filter input value
 
   toppings = new FormControl('');
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
-
+  toppingList: string[] = [
+    'Extra cheese',
+    'Mushroom',
+    'Onion',
+    'Pepperoni',
+    'Sausage',
+    'Tomato',
+  ];
 
   /*
   filterResults(text: string, text_alergeni: string) {
@@ -85,12 +97,8 @@ export class HomeDepthComponent {
     );
   }
   */
-  
 
-
-  
   filterResults(text: string, text_alergeni: string) {
-    
     if (!text && !text_alergeni) {
       this.filteredMenuItemList = this.initialMenuItemList; // Display the initial list without any filters
       return; //Exit the function early
@@ -99,33 +107,34 @@ export class HomeDepthComponent {
     const allergensList = this.convertStringToList(text_alergeni); // Convert string to list
     const cityList = this.convertStringToList(text);
 
-    this.filteredMenuItemList = this.menuItemList.filter(
-      (menuItem) => {
-        let vIncludeInLista = true;
+    this.filteredMenuItemList = this.menuItemList.filter((menuItem) => {
+      let vIncludeInLista = true;
 
-        // testam includerea dupa descriere
-        if (text.trim().length > 0 )
-          vIncludeInLista = menuItem?.DENUMIRE.toLowerCase().includes(text.toLowerCase());
-        
-        // daca elementul trebuie inclus, facem testul cu aleregnii
-        if (vIncludeInLista && text_alergeni.trim().length > 0)
+      // testam includerea dupa descriere
+      if (text.trim().length > 0)
+        vIncludeInLista = menuItem?.DENUMIRE.toLowerCase().includes(
+          text.toLowerCase()
+        );
+
+      // daca elementul trebuie inclus, facem testul cu aleregnii
+      if (vIncludeInLista && text_alergeni.trim().length > 0)
         // Check if any allergen in the list is present in the menuItem's allergens
-          vIncludeInLista = allergensList.every((allergen) => {
-            return !menuItem?.LISTA_ALERGENI.toLowerCase().includes(allergen.toLowerCase());
-          });
-        
+        vIncludeInLista = allergensList.every((allergen) => {
+          return !menuItem?.LISTA_ALERGENI.toLowerCase().includes(
+            allergen.toLowerCase()
+          );
+        });
 
-        return vIncludeInLista;
-        }
-    );
+      return vIncludeInLista;
+    });
   }
   convertStringToList(text_alergeni: string) {
     // Remove leading/trailing spaces and split string by commas
-    return text_alergeni.trim().split(',').map((allergen) => allergen.trim());
+    return text_alergeni
+      .trim()
+      .split(',')
+      .map((allergen) => allergen.trim());
   }
-  
-  
-
 
   //preluam ID-ul item-ului din meniu din router si initializam lista cu iteme din meniu.
   constructor(private router: Router) {
@@ -134,11 +143,11 @@ export class HomeDepthComponent {
       this.menuItemList = menuItemList;
       console.log(menuItemList);
 
-      
       this.filteredMenuItemList = menuItemList;
       this.menuService.getMenuItemById(menuItemID).then((menuItemList) => {
         this.menuItemList = menuItemList;
-        this.initialMenuItemList = menuItemList; })// Store the initial list
+        this.initialMenuItemList = menuItemList;
+      }); // Store the initial list
       //metoda workaround pentru a intra in meniul de detalii
       /*
       if (this.menuItemList.length == 0) {
@@ -147,12 +156,10 @@ export class HomeDepthComponent {
         });
       }*/
     });
-    
+
     /*const housingLocationId = parseInt(this.route.snapshot.params['id'], 10);
     this.housingService.getHousingLocationById();*/
   }
-
-
 
   //dam refresh la pagina automat.
   ngOnInit() {
@@ -161,16 +168,12 @@ export class HomeDepthComponent {
         window.location.reload();
       }
     });
-    clearFilters(); {
-      this.filteredMenuItemList = this.initialMenuItemList;} // Display the initial list without any filters
-    
+    clearFilters();
+    {
+      this.filteredMenuItemList = this.initialMenuItemList;
+    } // Display the initial list without any filters
   }
-
-
-
-
 }
-  function clearFilters() {
-    throw new Error('Function not implemented.');
-  }
-
+function clearFilters() {
+  throw new Error('Function not implemented.');
+}

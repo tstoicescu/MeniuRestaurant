@@ -5,13 +5,17 @@
 }
 
 body {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  background-color: rgb(50, 50, 50);
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+header {
+  background-color: rgb(35, 35, 35);
 }
 :root {
-  --primary-color: #605DC8;
-  --secondary-color: #8B89E6;
-  --accent-color: #e8e7fa;
-  --shadow-color: #E8E8E8;
+  --primary-color: #d37210;
+  --secondary-color: #d37210;
+  --accent-color: #d4d1b8;
+  --shadow-color: rgb(35, 35, 35);
 }
 
 button.primary {
@@ -22,5 +26,11 @@ button.primary {
   border-radius: 8px;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
