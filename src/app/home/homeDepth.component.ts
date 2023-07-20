@@ -6,8 +6,8 @@ import { MenuService } from '../menuService';
 import { ActivatedRoute } from '@angular/router';
 import { Router, NavigationEnd } from '@angular/router';
 
+import { NgFor } from '@angular/common';
 import { FormControl } from '@angular/forms';
-import {NgFor} from '@angular/common';
 import { MatSelectModule }  from '@angular/material/select'; 
 import { MatFormFieldModule }  from '@angular/material/form-field'; 
 
@@ -26,14 +26,14 @@ import { MatFormFieldModule }  from '@angular/material/form-field';
           #filter_alergeni
         />
 
-        <!--mat-form-field>
-  <mat-label>Toppings</mat-label-->
-  <mat-select  multiple>
-    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-  </mat-select>
-  <!--/mat-form-field-->
-
-
+        <!--mat-form-field-->
+        <div class="alergeni_box">
+          <mat-label>Toppings</mat-label>
+          <mat-select  multiple>
+              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+          </mat-select>
+        </div>
+        <!--/mat-form-field-->
 
         <button
           class="primary"

@@ -14,8 +14,6 @@ import { MenuService } from '../menuService';
       <form>
         <input type="text" placeholder="Filter by city" #filter />
         <!--input type="text" placeholder="nu include alergenii" #filter_alergeni /-->
-        
-        
 
         <button
           class="primary"
