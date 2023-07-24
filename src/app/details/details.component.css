@@ -7,27 +7,31 @@
 }
 
 .listing-heading {
+  margin-top: 40px;
+  color: #d4d1b8;
   font-size: 48pt;
   font-weight: bold;
+  line-height: 125%;
   margin-bottom: 15px;
-}
-
-.listing-location::before {
-  content: url("/assets/location-pin.svg") / "";
 }
 
 .listing-location {
+  margin-top: 40px;
+  color: #afad99;
   font-size: 24pt;
-  margin-bottom: 15px;
+  margin-bottom: 120px;
 }
 
 .listing-features > .section-heading {
   color: var(--secondary-color);
   font-size: 24pt;
-  margin-bottom: 15px;
+  margin-bottom: 60px;
 }
 
 .listing-features {
+  color: #afad99;
+  font-size: 18pt;
+  line-height: 125%;
   margin-bottom: 20px;
 }
 
@@ -67,6 +71,6 @@ input {
 @media (max-width: 1024px) {
   .listing-photo {
     width: 100%;
-    height: 400px;
+    height: 50%;
   }
 }
