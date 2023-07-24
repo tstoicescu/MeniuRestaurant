@@ -30,8 +30,8 @@ button {
 }
 
 .alergeni_box {
-  width: 100%;
   color: var(--primary-color);
+  width: 20%;
 }
 
 @media (min-width: 500px) and (max-width: 768px) {
@@ -47,4 +47,7 @@ button {
   .results {
     grid-template-columns: 1fr;
   }
+
+
+
 }

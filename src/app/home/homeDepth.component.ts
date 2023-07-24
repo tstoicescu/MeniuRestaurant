@@ -24,14 +24,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   template: `
     <section>
       <form>
+        
         <input type="text" placeholder="Filter by city" #filter />
+        
         <input
           type="text"
           placeholder="Enter allergens separated by commas"
           #filter_alergeni
         />
 
-        <div class="alergeni_box">
+        <!--div class="alergeni_box"-->
         <mat-form-field>
         <mat-label>Toppings</mat-label>
           <mat-select multiple>
@@ -40,7 +42,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
             }}</mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+        
+        
+      <!--/div-->
         
         <button
           class="primary"
